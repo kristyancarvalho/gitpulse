@@ -2,6 +2,7 @@ package svg
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
 	"log"
 	"strings"
@@ -21,8 +22,8 @@ const svgTemplate = `<svg xmlns="http://www.w3.org/2000/svg" width="{{ .TotalWid
     <path fill="url(#b)" d="M0 0h{{ .TotalWidth }}v20H0z"/>
   </g>
   <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="110">
-    <text x="{{ .LabelX }}" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)">{{ .LabelText }}</text>
-    <text x="{{ .LabelX }}" y="140" transform="scale(.1)">{{ .LabelText }}</text>
+    <text x="{{ .LabelX }}" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)"><tspan font-weight="bold">{{ .Username }}</tspan><tspan>/{{ .RepoName }}</tspan></text>
+    <text x="{{ .LabelX }}" y="140" transform="scale(.1)"><tspan font-weight="bold">{{ .Username }}</tspan><tspan>/{{ .RepoName }}</tspan></text>
     <text x="{{ .MessageX }}" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)">{{ .MessageText }}</text>
     <text x="{{ .MessageX }}" y="140" transform="scale(.1)">{{ .MessageText }}</text>
   </g>
@@ -30,7 +31,8 @@ const svgTemplate = `<svg xmlns="http://www.w3.org/2000/svg" width="{{ .TotalWid
 `
 
 type TemplateData struct {
-	LabelText    string
+	Username     string
+	RepoName     string
 	MessageText  string
 	LabelColor   string
 	MessageColor string
@@ -45,12 +47,14 @@ func calculateTextWidth(text string) int {
 	return len(text) * 7
 }
 
-func GenerateBadge(label, message, color string) (string, error) {
-	labelWidth := calculateTextWidth(label) + 10
+func GenerateBadge(username, repoName, message, color string) (string, error) {
+	fullLabel := fmt.Sprintf("%s/%s", username, repoName)
+	labelWidth := calculateTextWidth(fullLabel) + 10
 	messageWidth := calculateTextWidth(message) + 10
 
 	data := TemplateData{
-		LabelText:    label,
+		Username:     username,
+		RepoName:     repoName,
 		MessageText:  message,
 		LabelColor:   "#555",
 		MessageColor: color,
@@ -78,7 +82,7 @@ func GenerateBadge(label, message, color string) (string, error) {
 
 func GenerateErrorBadge(message string) string {
 	cleanedMessage := strings.ReplaceAll(message, "-", "--")
-	svg, err := GenerateBadge("gitpulse", cleanedMessage, "#e05d44")
+	svg, err := GenerateBadge("gitpulse", "error", cleanedMessage, "#e05d44")
 	if err != nil {
 		return "<svg>Error</svg>"
 	}

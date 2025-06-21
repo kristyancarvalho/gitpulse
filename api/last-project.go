@@ -59,7 +59,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	badge, err := svg.GenerateBadge(repo.Name, language, color)
+	badge, err := svg.GenerateBadge(username, repo.Name, language, color)
 	if err != nil {
 		sendErrorResponse(w, "Failed to generate SVG", http.StatusInternalServerError)
 		return
