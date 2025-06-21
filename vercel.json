@@ -1,0 +1,14 @@
+{
+    "builds": [
+      {
+        "src": "api/last-project.go",
+        "use": "@vercel/go"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/last-project",
+        "dest": "api/last-project.go"
+      }
+    ]
+  }
