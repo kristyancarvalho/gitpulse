@@ -1,9 +1,13 @@
-# GitPulse
+<p align="center">
+  <h1 align="center">GitPulse</h1>
 
-![GitHub repo size](https://img.shields.io/github/repo-size/kristyancarvalho/gitpulse?color=success)
-![GitHub last commit](https://img.shields.io/github/last-commit/kristyancarvalho/gitpulse)
-![GitHub stars](https://img.shields.io/github/stars/kristyancarvalho/gitpulse?style=social)
-![GitHub forks](https://img.shields.io/github/forks/kristyancarvalho/gitpulse?style=social)
+  <p align="center">
+    <img src="https://img.shields.io/github/repo-size/kristyancarvalho/gitpulse?color=success" alt="Repo size" />
+    <img src="https://img.shields.io/github/last-commit/kristyancarvalho/gitpulse" alt="Last commit" />
+    <img src="https://img.shields.io/github/stars/kristyancarvalho/gitpulse?style=social" alt="Stars" />
+    <img src="https://img.shields.io/github/forks/kristyancarvalho/gitpulse?style=social" alt="Forks" />
+  </p>
+</p>
 
 ---
 
