@@ -1,5 +1,15 @@
+<p align="center">
+  <h1 align="center">GitPulse</h1>
 
-# GitPulse
+  <p align="center">
+    <img src="https://img.shields.io/github/repo-size/kristyancarvalho/gitpulse?color=success" alt="Repo size" />
+    <img src="https://img.shields.io/github/last-commit/kristyancarvalho/gitpulse" alt="Last commit" />
+    <img src="https://img.shields.io/github/stars/kristyancarvalho/gitpulse?style=social" alt="Stars" />
+    <img src="https://img.shields.io/github/forks/kristyancarvalho/gitpulse?style=social" alt="Forks" />
+  </p>
+</p>
+
+---
 
 Webservice built in Go that generates an image displaying the **latest public GitHub contribution** of a user, showing the repository name and its main language.
 
