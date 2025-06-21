@@ -4,47 +4,63 @@ import (
 	"bytes"
 	"html/template"
 	"log"
+	"strings"
 )
 
-const svgTemplate = `
-<svg xmlns="http://www.w3.org/2000/svg" width="380" height="60" viewBox="0 0 380 60">
-    <style>
-        .container {
-            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
-            font-size: 14px;
-            fill: #333;
-        }
-        .repo-name {
-            font-weight: 600;
-            font-size: 16px;
-        }
-        .label {
-            font-weight: 400;
-            fill: #555;
-        }
-        .lang-color {
-            fill: {{ .Color }};
-        }
-    </style>
-    <rect x="0" y="0" width="380" height="60" fill="transparent"/>
-    <g class="container" transform="translate(10, 25)">
-        <text class="label">Last commit:</text>
-        <text x="85" y="0" class="repo-name">{{ .RepoName }}</text>
-    </g>
-    <g class="container" transform="translate(10, 48)">
-        <text class="label">Main language:</text>
-        <text x="105" y="0" class="lang-color">{{ .Language }}</text>
-    </g>
+const svgTemplate = `<svg xmlns="http://www.w3.org/2000/svg" width="{{ .TotalWidth }}" height="20">
+  <linearGradient id="b" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
+    <stop offset="1" stop-opacity=".1"/>
+  </linearGradient>
+  <clipPath id="a">
+    <rect width="{{ .TotalWidth }}" height="20" rx="3" fill="#fff"/>
+  </clipPath>
+  <g clip-path="url(#a)">
+    <path fill="{{ .LabelColor }}" d="M0 0h{{ .LabelWidth }}v20H0z"/>
+    <path fill="{{ .MessageColor }}" d="M{{ .LabelWidth }} 0h{{ .MessageWidth }}v20H{{ .LabelWidth }}z"/>
+    <path fill="url(#b)" d="M0 0h{{ .TotalWidth }}v20H0z"/>
+  </g>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="110">
+    <text x="{{ .LabelX }}" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)">{{ .LabelText }}</text>
+    <text x="{{ .LabelX }}" y="140" transform="scale(.1)">{{ .LabelText }}</text>
+    <text x="{{ .MessageX }}" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)">{{ .MessageText }}</text>
+    <text x="{{ .MessageX }}" y="140" transform="scale(.1)">{{ .MessageText }}</text>
+  </g>
 </svg>
 `
 
 type TemplateData struct {
-	RepoName string
-	Language string
-	Color    string
+	LabelText    string
+	MessageText  string
+	LabelColor   string
+	MessageColor string
+	TotalWidth   int
+	LabelWidth   int
+	MessageWidth int
+	LabelX       int
+	MessageX     int
 }
 
-func GenerateBadge(data TemplateData) (string, error) {
+func calculateTextWidth(text string) int {
+	return len(text) * 7
+}
+
+func GenerateBadge(label, message, color string) (string, error) {
+	labelWidth := calculateTextWidth(label) + 10
+	messageWidth := calculateTextWidth(message) + 10
+
+	data := TemplateData{
+		LabelText:    label,
+		MessageText:  message,
+		LabelColor:   "#555",
+		MessageColor: color,
+		TotalWidth:   labelWidth + messageWidth,
+		LabelWidth:   labelWidth,
+		MessageWidth: messageWidth,
+		LabelX:       labelWidth * 5,
+		MessageX:     (labelWidth + messageWidth/2) * 10,
+	}
+
 	tmpl, err := template.New("svg").Parse(svgTemplate)
 	if err != nil {
 		log.Printf("Error parsing SVG template: %v", err)
@@ -61,14 +77,10 @@ func GenerateBadge(data TemplateData) (string, error) {
 }
 
 func GenerateErrorBadge(message string) string {
-	errorData := TemplateData{
-		RepoName: "Error",
-		Language: message,
-		Color:    "#de2f2f",
-	}
-	svg, err := GenerateBadge(errorData)
+	cleanedMessage := strings.ReplaceAll(message, "-", "--")
+	svg, err := GenerateBadge("gitpulse", cleanedMessage, "#e05d44")
 	if err != nil {
-		return "<svg>Error generating badge</svg>"
+		return "<svg>Error</svg>"
 	}
 	return svg
 }
