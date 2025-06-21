@@ -1,5 +1,11 @@
-
 # GitPulse
+
+![GitHub repo size](https://img.shields.io/github/repo-size/kristyancarvalho/gitpulse?color=success)
+![GitHub last commit](https://img.shields.io/github/last-commit/kristyancarvalho/gitpulse)
+![GitHub stars](https://img.shields.io/github/stars/kristyancarvalho/gitpulse?style=social)
+![GitHub forks](https://img.shields.io/github/forks/kristyancarvalho/gitpulse?style=social)
+
+---
 
 Webservice built in Go that generates an image displaying the **latest public GitHub contribution** of a user, showing the repository name and its main language.
 
